@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"interview/code/list"
+	"interview/code/algorithm"
 )
 
 func main() {
@@ -59,24 +59,36 @@ func main() {
 	// }
 	// node := list.MergeTwoLists2(list1, list2)
 	// fmt.Println(node)
-	head := &list.ListNode{
-		Val: 1,
-		Next: &list.ListNode{
-			Val: 4,
-			Next: &list.ListNode{
-				Val: 3,
-				Next: &list.ListNode{
-					Val: 2,
-					Next: &list.ListNode{
-						Val: 5,
-						Next: &list.ListNode{
-							Val: 2,
-						},
-					},
-				},
-			},
-		},
-	}
-	resHead := list.Partition(head, 3)
-	fmt.Println("res: ", resHead)
+
+	// head := &list.ListNode{
+	// 	Val: 1,
+	// 	Next: &list.ListNode{
+	// 		Val: 4,
+	// 		Next: &list.ListNode{
+	// 			Val: 3,
+	// 			Next: &list.ListNode{
+	// 				Val: 2,
+	// 				Next: &list.ListNode{
+	// 					Val: 5,
+	// 					Next: &list.ListNode{
+	// 						Val: 2,
+	// 					},
+	// 				},
+	// 			},
+	// 		},
+	// 	},
+	// }
+	// // resHead := list.Partition(head, 3)
+	// resHead := list.ReverseList(head)
+	// fmt.Println("res: ", resHead)
+
+	// 排序
+	arr := []int{8, 4, 5, 7, 1, 3, 6, 2}
+
+	res := algorithm.ShellSort(arr)
+	fmt.Println("res: ", res)
+
+	// 查找
+	res1 := algorithm.BinarySearch(arr, 38)
+	fmt.Println("res1: ", res1)
 }

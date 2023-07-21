@@ -4,5 +4,8 @@
   },
   "code-runner.executorMapByGlob": {
       "$dir\\*.go": "go"
-  }
+  },
+  "cSpell.words": [
+    "nums"
+  ]
 }

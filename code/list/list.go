@@ -6,7 +6,7 @@ type ListNode struct {
 	Next *ListNode
 }
 
-// MergeTwoLists 合并两个有序列表
+// MergeTwoLists 21.合并两个有序列表
 func MergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
 	// 虚拟头节点
 	resNode := &ListNode{-1, nil}
@@ -54,7 +54,7 @@ func MergeTwoLists2(list1 *ListNode, list2 *ListNode) *ListNode {
 	}
 }
 
-// Partition 分隔链表
+// Partition 86.分隔链表
 // 问题简化：需要获取2个链表，一个链表元素全小于x，另一个链表元素全大于x
 func Partition(head *ListNode, x int) *ListNode {
 	// 存放小于x的节点
@@ -80,4 +80,27 @@ func Partition(head *ListNode, x int) *ListNode {
 	// 连接两个链表
 	p1.Next = dummy2.Next
 	return dummy1.Next
+}
+
+// MergeKLists 合并K个升序链表
+func MergeKLists(lists []*ListNode) *ListNode {
+	return nil
+}
+
+// ReverseList 链表反转
+func ReverseList(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+	var (
+		pre *ListNode = nil
+		cur           = head
+	)
+	for cur != nil {
+		next := cur.Next
+		cur.Next = pre
+		pre = cur
+		cur = next
+	}
+	return pre
 }
