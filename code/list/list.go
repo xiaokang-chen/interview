@@ -82,11 +82,6 @@ func Partition(head *ListNode, x int) *ListNode {
 	return dummy1.Next
 }
 
-// MergeKLists 合并K个升序链表
-func MergeKLists(lists []*ListNode) *ListNode {
-	return nil
-}
-
 // ReverseList 链表反转
 func ReverseList(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {
