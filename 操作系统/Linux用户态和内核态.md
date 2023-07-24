@@ -2,7 +2,7 @@
 
 [toc]
 
-https://blog.csdn.net/m0_37199770/article/details/113482312
+参考：https://blog.csdn.net/m0_37199770/article/details/113482312
 
 1. 用户态和内核态的本质
     ring 0被叫做内核态，完全在操作系统内核中运行
