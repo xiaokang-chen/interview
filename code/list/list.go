@@ -1,8 +1,15 @@
 package list
 
+// ZipListNode 压缩列表节点
+type ZipListNode struct {
+	PreLen   int         // 记录前一节点的长度，目的是可以从后向前遍历
+	Encoding string      // 记录当前节点的类型
+	Data     interface{} // 记录当前节点的数据
+}
+
 // ZipList 压缩列表
 type ZipList struct {
-	Val []int
+	Val []ZipListNode
 }
 
 // ListNode 单链表节点
@@ -11,9 +18,7 @@ type ListNode struct {
 	Next *ListNode
 }
 
-<<<<<<< Updated upstream
 // MergeTwoLists 21.合并两个有序列表
-=======
 // LinkedListNode 双链表节点
 type LinkedListNode struct {
 	Val  int
@@ -36,7 +41,6 @@ type QuickList struct {
 }
 
 // MergeTwoLists 合并两个有序列表
->>>>>>> Stashed changes
 func MergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
 	// 虚拟头节点
 	resNode := &ListNode{-1, nil}
