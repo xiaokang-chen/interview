@@ -1,12 +1,42 @@
 package list
 
-// ListNode 单链表
+// ZipList 压缩列表
+type ZipList struct {
+	Val []int
+}
+
+// ListNode 单链表节点
 type ListNode struct {
 	Val  int
 	Next *ListNode
 }
 
+<<<<<<< Updated upstream
 // MergeTwoLists 21.合并两个有序列表
+=======
+// LinkedListNode 双链表节点
+type LinkedListNode struct {
+	Val  int
+	Pre  *LinkedListNode
+	Next *LinkedListNode
+}
+
+// QuickListNode 快链表节点
+type QuickListNode struct {
+	Val  *ZipList // 指向压缩数组的指针
+	Pre  *QuickListNode
+	Next *QuickListNode
+}
+
+// QuickList 快链表
+type QuickList struct {
+	Head *QuickListNode
+	Tail *QuickListNode
+	// ...
+}
+
+// MergeTwoLists 合并两个有序列表
+>>>>>>> Stashed changes
 func MergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
 	// 虚拟头节点
 	resNode := &ListNode{-1, nil}
