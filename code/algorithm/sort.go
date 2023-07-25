@@ -127,3 +127,65 @@ func ShellSort(arr []int) []int {
 	}
 	return arr
 }
+
+// QuickSort 快速排序
+// 1. 从数列中找出一个“基准”元素
+// 2. 重新排列数列，所有比基准小的放在基准前面，所有比基准大的放在后面
+// 3. 递归地把小于基准的子数列和大于基准的子数列排序
+func QuickSort(arr []int, left int, right int) []int {
+	if left < right {
+		pivot := partition(arr, left, right)
+		QuickSort(arr, left, pivot-1)
+		QuickSort(arr, pivot+1, right)
+	}
+	return arr
+}
+
+// partition 分区
+func partition(arr []int, left int, right int) int {
+	pivot := arr[left]
+	for left < right {
+		// 右侧指针往左侧移动，直到找到小于pivot的值
+		for left < right && pivot < arr[right] {
+			right--
+		}
+		arr[left] = arr[right]
+		// 左侧指针往右侧移动，直到找到大于pivot的值
+		for left < right && pivot >= arr[left] {
+			left++
+		}
+		arr[right] = arr[left]
+	}
+	// 临界条件：left=right
+	arr[left] = pivot
+	return left
+}
+
+// HeapSort 堆排序
+// 
+// 堆从逻辑结构上就是一个完全二叉树
+// 
+// 1. 首先将待排序数组构造成一个大根堆，此时，数组最大的值就在根节点
+// 2. 将根节点的数和末尾的数交换，此时，末尾的数为最大值，剩余待排序数组长度为n-1
+// 3. 将n-1的待排序数组再调整为大根堆，如此反复执行，最后会得到有序数组
+func HeapSort(arr []int) []int {
+	// 建堆
+	for i := len(arr)/2; i >= 0; i++ {
+		adjustHeap(arr, i, len(arr))
+	}
+	// 调整（构造堆）
+	for j := len(arr)-1; j > 0; j-- {
+		// 将头和尾换位置，最大值放最后
+		arr[0], arr[j] = arr[j], arr[0]
+		adjustHeap(arr, 0, j)
+	}
+	return arr
+}
+
+// adjustHeap 构造堆
+// 1. 从最后一颗子树开始，从后往前调整
+// 2. 每次调整，从上往下调整
+// 3. 调整为大根堆
+func adjustHeap(arr []int, i, len) {
+	
+}

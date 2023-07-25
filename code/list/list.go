@@ -43,8 +43,8 @@ type QuickList struct {
 // MergeTwoLists 合并两个有序列表
 func MergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
 	// 虚拟头节点
-	resNode := &ListNode{-1, nil}
-	p := resNode
+	dummyNode := &ListNode{-1, nil}
+	p := dummyNode
 	p1, p2 := list1, list2
 	for p1 != nil && p2 != nil {
 		if p1.Val > p2.Val {
@@ -54,7 +54,7 @@ func MergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
 			p.Next = p1
 			p1 = p1.Next
 		}
-		// p指针不断前进
+		// 向后移动
 		p = p.Next
 	}
 
@@ -64,7 +64,7 @@ func MergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
 	if p2 != nil {
 		p.Next = p2
 	}
-	return resNode.Next
+	return dummyNode.Next
 }
 
 // MergeTwoLists2 递归
@@ -117,6 +117,7 @@ func Partition(head *ListNode, x int) *ListNode {
 }
 
 // ReverseList 链表反转
+// 关键点：设置一个前驱节点（pre）
 func ReverseList(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {
 		return head
@@ -132,4 +133,13 @@ func ReverseList(head *ListNode) *ListNode {
 		cur = next
 	}
 	return pre
+}
+
+// MergeKLists 合并k个链表
+func MergeKLists(lists []*ListNode) *ListNode {
+	resNode := &ListNode{-1, nil}
+	for i := 0; i < len(lists); i++ {
+		resNode = MergeTwoLists(resNode, lists[i])
+	}
+	return resNode.Next
 }
