@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"interview/code/algorithm"
+	"interview/code/array"
 )
 
 func main() {
@@ -82,11 +82,11 @@ func main() {
 	// resHead := list.ReverseList(head)
 	// fmt.Println("res: ", resHead)
 
-	// 排序
-	arr := []int{8, 4, 5, 7, 1, 3, 6, 2}
+	// // 排序
+	// arr := []int{8, 4, 5, 7, 1, 3, 6, 2}
 
-	res := algorithm.QuickSort(arr, 0, len(arr)-1)
-	fmt.Println("res: ", res)
+	// res := algorithm.QuickSort(arr, 0, len(arr)-1)
+	// fmt.Println("res: ", res)
 
 	// // 查找
 	// res1 := algorithm.BinarySearch(arr, 38)
@@ -122,4 +122,42 @@ func main() {
 	// // res := list.MergeKLists(lists)
 	// res := heap.MergeKLists(lists)
 	// fmt.Println("res1: ", res)
+
+	// node := &list.ListNode{1, nil}
+	// res := list.RemoveNthFromEnd(node, 1)
+	// fmt.Println("res: ", res)
+
+	// head := &list.ListNode{
+	// 	Val: 1,
+	// }
+	// node1 := &list.ListNode{
+	// 	Val: 2,
+	// }
+	// node2 := &list.ListNode{
+	// 	Val: 3,
+	// }
+	// node3 := &list.ListNode{
+	// 	Val: 3,
+	// }
+	// node4 := &list.ListNode{
+	// 	Val: 5,
+	// }
+	// head.Next = node1
+	// node1.Next = node2
+	// node2.Next = node3
+	// node3.Next = node4
+	// node4.Next = nil
+
+	// res := list.HasCycle(head)
+	// fmt.Println("res: ", res)
+
+	// var arr = []int{2, 7, 11, 15}
+	// res := array.RemoveDuplicates(arr)
+	// fmt.Println("res: ", res, arr)
+
+	// array.MoveZeroes2(arr)
+	// res := array.TwoSum(arr, 9)
+	s := "babad"
+	res := array.LongestPalindrome(s)
+	fmt.Println("res: ", res)
 }

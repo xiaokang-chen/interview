@@ -18,7 +18,6 @@ type ListNode struct {
 	Next *ListNode
 }
 
-// MergeTwoLists 21.合并两个有序列表
 // LinkedListNode 双链表节点
 type LinkedListNode struct {
 	Val  int
@@ -40,7 +39,7 @@ type QuickList struct {
 	// ...
 }
 
-// MergeTwoLists 合并两个有序列表
+// MergeTwoLists 21.合并两个有序列表
 func MergeTwoLists(list1 *ListNode, list2 *ListNode) *ListNode {
 	// 虚拟头节点
 	dummyNode := &ListNode{-1, nil}
@@ -135,11 +134,131 @@ func ReverseList(head *ListNode) *ListNode {
 	return pre
 }
 
-// MergeKLists 合并k个链表
+// MergeKLists 23.合并k个链表
 func MergeKLists(lists []*ListNode) *ListNode {
 	resNode := &ListNode{-1, nil}
 	for i := 0; i < len(lists); i++ {
 		resNode = MergeTwoLists(resNode, lists[i])
 	}
 	return resNode.Next
+}
+
+// FindFromEnd 单链表倒数第k个节点
+// 技巧：双指针-快慢指针
+// 倒数第k个节点就是正数第n-k+1个节点，从头节点往后走n-k即可到达
+func FindFromEnd(head *ListNode, k int) *ListNode {
+	p1, p2 := head, head
+	// p1先向后走k步
+	for i := 0; i < k; i++ {
+		p1 = p1.Next
+	}
+	// p1再向后走n-k，p2与此同时向后移动，此时p1=nil，p2
+	// 这轮巧妙之处在于循环靠p1=nil这个条件
+	for p1 != nil {
+		p1 = p1.Next
+		p2 = p2.Next
+	}
+	return p2
+}
+
+// RemoveNthFromEnd 19.删除链表第N个节点
+func RemoveNthFromEnd(head *ListNode, k int) *ListNode {
+	dummy := &ListNode{-1, head}
+	// 这里给p2赋值dummy有效的解决了边界问题
+	p1, p2 := head, dummy
+	// p1先向后走k步，不走k+1的原因是有可能越界
+	for i := 0; i < k; i++ {
+		p1 = p1.Next
+	}
+	for p1 != nil {
+		p1 = p1.Next
+		p2 = p2.Next
+	}
+	// p2为待删除节点的前驱
+	p2.Next = p2.Next.Next
+	return dummy.Next
+}
+
+// MiddleNode 876.链表中点
+func MiddleNode(head *ListNode) *ListNode {
+	slow, fast := head, head
+	for fast != nil && fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
+	return slow
+}
+
+// HasCycle 141.判断链表成环
+func HasCycle(head *ListNode) bool {
+	slow, fast := head, head
+	for fast != nil && fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+		if fast == slow {
+			return true
+		}
+	}
+	return false
+}
+
+// DetectCycle 142.返回链接入环节点
+func DetectCycle(head *ListNode) *ListNode {
+	slow, fast := head, head
+	for fast != nil && fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+		if fast == slow {
+			break
+		}
+	}
+	// 如果没有环，需要返回Nil
+	if fast != nil && fast.Next != nil {
+		return nil
+	}
+	slow = head
+	// 二次相遇时在环入口
+	for fast != slow {
+		slow = slow.Next
+		fast = fast.Next
+	}
+	return slow
+}
+
+// DetectCycle2 哈希表寻找入口环节点
+// 循环遍历，每次都将遍历节点插入到map中
+func DetectCycle2(head *ListNode) *ListNode {
+	seen := map[*ListNode]bool{}
+	p := head
+	for p != nil {
+		// 如果存在于map，则返回
+		if _, ok := seen[p]; ok {
+			return p
+		}
+		seen[p] = true
+		p = p.Next
+	}
+	return nil
+}
+
+// GetIntersectionNode 160.相交链表
+// 技巧在于将两个指针以某种方式，能够同时到达相交点
+// 可以通过逻辑上连接两个链表，来让两个指针分别遍历的链表长度相同，以达到最后都到达相交点的目的
+func GetIntersectionNode(headA, headB *ListNode) *ListNode {
+	p1, p2 := headA, headB
+	for p1 != p2 {
+		// p1走一步，如果走到A末尾，转到B
+		if p1 == nil {
+			p1 = headB
+		} else {
+			p1 = p1.Next
+		}
+		// p2走一步，如果走到B末尾，转到A
+		if p2 == nil {
+			p2 = headA
+		} else {
+			p2 = p2.Next
+		}
+	}
+	return p1
 }
