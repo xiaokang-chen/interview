@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"interview/code/array"
+	"interview/code/tree"
 )
 
 func main() {
@@ -151,13 +151,39 @@ func main() {
 	// res := list.HasCycle(head)
 	// fmt.Println("res: ", res)
 
-	// var arr = []int{2, 7, 11, 15}
+	// var arr = []int{8, 4, 5, 7, 1, 3, 6, 2}
 	// res := array.RemoveDuplicates(arr)
 	// fmt.Println("res: ", res, arr)
 
 	// array.MoveZeroes2(arr)
 	// res := array.TwoSum(arr, 9)
-	s := "babad"
-	res := array.LongestPalindrome(s)
+	// s := "babad"
+	// res := array.LongestPalindrome(s)
+
+	// res := algorithm.MergeSort(arr)
+
+	root := &tree.TreeNode{
+		Val: 1,
+		Left: &tree.TreeNode{
+			Val: 2,
+			Left: &tree.TreeNode{
+				Val: 3,
+			},
+			Right: &tree.TreeNode{
+				Val: 4,
+			},
+		},
+		Right: &tree.TreeNode{
+			Val: 5,
+			Left: &tree.TreeNode{
+				Val: 6,
+				Left: &tree.TreeNode{
+					Val: 7,
+				},
+			},
+		},
+	}
+	// tree.Traverse1(root, 1)
+	res := tree.DiameterOfBinaryTree(root)
 	fmt.Println("res: ", res)
 }

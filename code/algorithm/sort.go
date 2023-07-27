@@ -1,6 +1,6 @@
 package algorithm
 
-// BubbleSort 冒泡排序
+// BubbleSort 1.冒泡排序
 // 时间复杂度：O(N^2)
 // 空间复杂度：O(1)
 func BubbleSort(arr []int) []int {
@@ -36,7 +36,7 @@ func BubbleSort2(arr []int) []int {
 	return arr
 }
 
-// SelectionSort 选择排序
+// SelectionSort 2.选择排序
 // 时间复杂度：O(N^2)
 // 空间复杂度：O(1)
 func SelectionSort(arr []int) []int {
@@ -57,7 +57,7 @@ func SelectionSort(arr []int) []int {
 	return arr
 }
 
-// InsertSort 插入排序
+// InsertSort 3.插入排序
 // 时间复杂度：O(N^2)
 // 空间复杂度：O(1)
 func InsertSort(arr []int) []int {
@@ -103,7 +103,7 @@ func InsertSort2(arr []int) []int {
 	return arr
 }
 
-// ShellSort 希尔排序
+// ShellSort 4.希尔排序
 func ShellSort(arr []int) []int {
 	d := len(arr)
 	for d > 1 {
@@ -128,7 +128,44 @@ func ShellSort(arr []int) []int {
 	return arr
 }
 
-// QuickSort 快速排序
+// MergeSort 归并排序
+// 分治法
+// 分：利用递归的方法将复杂问题转化为相同类型的子问题
+// 治：针对这些子问题的共性统一处理
+// 诀窍：找到临界条件，在此条件上将递归初始值具体化
+func MergeSort(arr []int) []int {
+	if len(arr) < 2 {
+		return arr
+	}
+	middle := len(arr) / 2
+	leftArr := arr[:middle]
+	rightArr := arr[middle:]
+	return merge(MergeSort(leftArr), MergeSort(rightArr))
+}
+
+// merge 合并
+func merge(left []int, right []int) []int {
+	var result []int
+	for len(left) != 0 && len(right) != 0 {
+		if left[0] < right[0] {
+			result = append(result, left[0])
+			left = left[1:]
+		} else {
+			result = append(result, right[0])
+			right = right[1:]
+		}
+	}
+	// 边界：剩余元素一起append
+	if len(left) != 0 {
+		result = append(result, left...)
+	}
+	if len(right) != 0 {
+		result = append(result, right...)
+	}
+	return result
+}
+
+// QuickSort 6.快速排序
 // 1. 从数列中找出一个“基准”元素
 // 2. 重新排列数列，所有比基准小的放在基准前面，所有比基准大的放在后面
 // 3. 递归地把小于基准的子数列和大于基准的子数列排序
@@ -162,19 +199,19 @@ func partition(arr []int, left int, right int) int {
 }
 
 // HeapSort 堆排序
-// 
+//
 // 堆从逻辑结构上就是一个完全二叉树
-// 
+//
 // 1. 首先将待排序数组构造成一个大根堆，此时，数组最大的值就在根节点
 // 2. 将根节点的数和末尾的数交换，此时，末尾的数为最大值，剩余待排序数组长度为n-1
 // 3. 将n-1的待排序数组再调整为大根堆，如此反复执行，最后会得到有序数组
 func HeapSort(arr []int) []int {
 	// 建堆
-	for i := len(arr)/2; i >= 0; i++ {
+	for i := len(arr) / 2; i >= 0; i++ {
 		adjustHeap(arr, i, len(arr))
 	}
 	// 调整（构造堆）
-	for j := len(arr)-1; j > 0; j-- {
+	for j := len(arr) - 1; j > 0; j-- {
 		// 将头和尾换位置，最大值放最后
 		arr[0], arr[j] = arr[j], arr[0]
 		adjustHeap(arr, 0, j)
@@ -186,6 +223,6 @@ func HeapSort(arr []int) []int {
 // 1. 从最后一颗子树开始，从后往前调整
 // 2. 每次调整，从上往下调整
 // 3. 调整为大根堆
-func adjustHeap(arr []int, i, len) {
-	
+func adjustHeap(arr []int, i int, len int) {
+	return
 }

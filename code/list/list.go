@@ -134,6 +134,17 @@ func ReverseList(head *ListNode) *ListNode {
 	return pre
 }
 
+// ReverseList2 用递归方式实现反转链表
+func ReverseList2(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+	newHead := ReverseList2(head.Next)
+	head.Next.Next = head
+	head.Next = nil
+	return newHead
+}
+
 // MergeKLists 23.合并k个链表
 func MergeKLists(lists []*ListNode) *ListNode {
 	resNode := &ListNode{-1, nil}
