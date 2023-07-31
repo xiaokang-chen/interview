@@ -207,12 +207,12 @@ func partition(arr []int, left int, right int) int {
 // 3. 将n-1的待排序数组再调整为大根堆，如此反复执行，最后会得到有序数组
 func HeapSort(arr []int) []int {
 	// 建堆
-	for i := len(arr) / 2; i >= 0; i++ {
+	// 在整个数组上，从后向前，以此对非叶子节点调整
+	for i := len(arr) / 2; i >= 0; i-- {
 		adjustHeap(arr, i, len(arr))
 	}
-	// 调整（构造堆）
-	for j := len(arr) - 1; j > 0; j-- {
-		// 将头和尾换位置，最大值放最后
+	// 调整堆
+	for j := len(arr) - 1; j >= 0; j-- {
 		arr[0], arr[j] = arr[j], arr[0]
 		adjustHeap(arr, 0, j)
 	}
@@ -224,5 +224,18 @@ func HeapSort(arr []int) []int {
 // 2. 每次调整，从上往下调整
 // 3. 调整为大根堆
 func adjustHeap(arr []int, i int, len int) {
-	return
+	left := 2*i + 1
+	right := 2*i + 2
+	largest := i
+	if left < len && arr[left] > arr[largest] {
+		largest = left
+	}
+	if right < len && arr[right] > arr[largest] {
+		largest = right
+	}
+	// 如果有调整则更新
+	if largest != i {
+		arr[largest], arr[i] = arr[i], arr[largest]
+		adjustHeap(arr, largest, len)
+	}
 }
