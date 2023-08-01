@@ -1,6 +1,8 @@
 package tree
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // 二叉树
 type TreeNode struct {
@@ -137,4 +139,145 @@ func DiameterOfBinaryTree2(root *TreeNode) int {
 	// 对每个节点计算直径，求出最大的
 	traverse(root)
 	return maxDepth
+}
+
+// WidthOfBinaryTree 二叉树最大宽度
+// BFS 广度优先遍历
+// 一个编号为index的节点的左子节点编号为[2*index]，右子节点编号为[2*index+1]
+func WidthOfBinaryTree(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	// 使用双端队列
+	type Pair struct {
+		node  *TreeNode
+		index int
+	}
+	res := 1
+	q := []Pair{{root, 1}}
+	for q != nil {
+		width := q[len(q)-1].index - q[0].index + 1
+		res = max(res, width)
+		temp := q
+		q = nil
+		// 遍历每一层
+		for _, p := range temp {
+			if p.node.Left != nil {
+				q = append(q, Pair{p.node.Left, p.index * 2})
+			}
+			if p.node.Right != nil {
+				q = append(q, Pair{p.node.Right, p.index*2 + 1})
+			}
+		}
+	}
+	return res
+}
+
+// WidthOfBinaryTree2 深度优先遍历
+// DFS 深度优先遍历
+// 一层一层的遍历，用两个变量left和right去分别达到每一层的最左边的节点和最右边的节点
+// 然后每一层计算right-left+1，进而更新全局maxWidth
+func WidthOfBinaryTree2(root *TreeNode) int {
+	levelMin := map[int]int{}
+	// 每层的宽度
+	var dfs func(*TreeNode, int, int) int
+	dfs = func(node *TreeNode, depth, index int) int {
+		if node == nil {
+			return 0
+		}
+		if _, ok := levelMin[depth]; !ok {
+			// 每一层最先访问的节点是最左边的节点
+			levelMin[depth] = index
+		}
+		return max(index-levelMin[depth]+1, max(dfs(node.Left, depth+1, index*2), dfs(node.Right, depth+1, index*2+1)))
+	}
+	return dfs(root, 1, 1)
+}
+
+// 树的广度优先遍历（层序遍历）
+// 需要借助队列实现
+func BFS(node *TreeNode) []int {
+	res := []int{}
+	if node == nil {
+		return res
+	}
+	queue := []*TreeNode{node}
+	for len(queue) > 0 {
+		cur := queue[0]
+		res = append(res, cur.Val)
+		queue = queue[1:]
+		if cur.Left != nil {
+			queue = append(queue, cur.Left)
+		}
+		if cur.Right != nil {
+			queue = append(queue, cur.Right)
+		}
+	}
+	return res
+}
+
+// 广度-递归
+func BFSWithRecursion(node *TreeNode) []int {
+	res := []int{}
+	if node == nil {
+		return res
+	}
+	slice := []*TreeNode{node}
+	var levelOrder func([]*TreeNode)
+	levelOrder = func(nodeSlice []*TreeNode) {
+		if len(nodeSlice) == 0 {
+			return
+		}
+		var nextNodeSlice []*TreeNode
+		for i := 0; i < len(nodeSlice); i++ {
+			cur := nodeSlice[i]
+			res = append(res, cur.Val)
+
+			// 当前node左子节点append到下一层node slice
+			if cur.Left != nil {
+				nextNodeSlice = append(nextNodeSlice, cur.Left)
+			}
+			// 当前node右子节点append到下一层node slice
+			if cur.Right != nil {
+				nextNodeSlice = append(nextNodeSlice, cur.Right)
+			}
+		}
+		levelOrder(nextNodeSlice)
+	}
+
+	levelOrder(slice)
+	return res
+}
+
+// 树的深度优先遍历（前序遍历）
+// 需要借助栈实现
+func DFS(node *TreeNode) []int {
+	res := []int{}
+	stack := []*TreeNode{}
+	cur := node
+	for cur != nil || len(stack) > 0 {
+		for cur != nil {
+			res = append(res, cur.Val)
+			stack = append(stack, cur)
+			cur = cur.Left
+		}
+		// 退出时，说明左边已经遍历完
+		// 此时需要弹出栈顶元素，并查看它的右节点
+		cur = stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		cur = cur.Right
+	}
+	return res
+}
+
+// 深度-递归
+func DFSWithRecursion(node *TreeNode) []int {
+	res := []int{}
+	if node == nil {
+		return res
+	}
+	res = append(res, node.Val)
+	res = append(res, DFSWithRecursion(node.Left)...)
+	res = append(res, DFSWithRecursion(node.Right)...)
+	return res
 }

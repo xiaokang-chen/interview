@@ -1,10 +1,5 @@
 package main
 
-import (
-	"fmt"
-	"interview/code/algorithm"
-)
-
 func main() {
 	// 数组线性遍历
 	// var arr = []int{1, 2, 3, 4}
@@ -151,7 +146,7 @@ func main() {
 	// res := list.HasCycle(head)
 	// fmt.Println("res: ", res)
 
-	var arr = []int{8, 4, 5, 7, 1, 3, 6, 2}
+	// var arr = []int{8, 4, 5, 7, 1, 3, 6, 2}
 	// res := array.RemoveDuplicates(arr)
 	// fmt.Println("res: ", res, arr)
 
@@ -186,6 +181,14 @@ func main() {
 	// tree.Traverse1(root, 1)
 	// res := tree.DiameterOfBinaryTree(root)
 
-	res := algorithm.HeapSort(arr)
-	fmt.Println("res: ", res)
+	// res := algorithm.HeapSort(arr)
+	// fmt.Println("res: ", res)
+
+	// 设置并行G数量
+	// runtime.GOMAXPROCS(2)
+
+	// res := tree.BFSWithRecursion(root)
+	// fmt.Println("res: ", res)
+
+	PrintAB()
 }
