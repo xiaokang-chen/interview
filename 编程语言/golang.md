@@ -91,3 +91,24 @@ Go V1.8：三色标记+混合写屏障，栈空间不启动，堆空间启动，
 堆内存：
 
 ## 七、golang 中的GMP
+
+## 八、golang interface 实现原理
+
+interface数据结构：
+
+```golang
+// 非空接口定义
+type iface struct {
+  tab  *itab // 非空接口的类型信息，里面包含了*_type，还有fun数组，存储抽象方法集
+  data unsafe.Pointer //指向原始数据指针
+}
+
+// 空接口定义
+type eface struct {
+  _type *_type //类型信息
+  data  unsafe.Pointer //数据信息，指向数据指针
+}
+```
+
+`_type 是go里面所有类型的一个抽象`，里面包含GC，反射，大小等需要的细节，它也决定了data如何解释和操作。
+里面包含了非常多信息 类型的大小、哈希、对齐以及种类等自动。

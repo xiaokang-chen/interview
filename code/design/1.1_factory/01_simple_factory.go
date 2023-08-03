@@ -11,18 +11,21 @@ type Car interface {
 type BMW struct{}
 type Benz struct{}
 
-func New(t int) Car {
-	if t == 1 {
-		return &BMW{}
-	} else {
-		return &Benz{}
-	}
-}
-
 func (b BMW) Run(name string) string {
 	return fmt.Sprintf("Hi, %s", name)
 }
 
 func (b Benz) Run(name string) string {
 	return fmt.Sprintf("Hello, %s", name)
+}
+
+// 工厂模块
+type SimpleFactory struct{}
+
+func (sf *SimpleFactory) Create(t int) Car {
+	if t == 1 {
+		return &BMW{}
+	} else {
+		return &Benz{}
+	}
 }

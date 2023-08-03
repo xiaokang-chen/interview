@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"runtime"
+)
+
 func main() {
 	// 数组线性遍历
 	// var arr = []int{1, 2, 3, 4}
@@ -190,5 +195,7 @@ func main() {
 	// res := tree.BFSWithRecursion(root)
 	// fmt.Println("res: ", res)
 
-	PrintAB()
+	// PrintAB()
+	fmt.Printf("main 协程数量：%d\n", runtime.NumGoroutine())
+	PrintLetter()
 }

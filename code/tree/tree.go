@@ -281,3 +281,30 @@ func DFSWithRecursion(node *TreeNode) []int {
 	res = append(res, DFSWithRecursion(node.Right)...)
 	return res
 }
+
+// LongestUnivaluePath 687.最长同值路径
+func LongestUnivaluePath(root *TreeNode) int {
+	var ans int
+	var dfs func(*TreeNode) int
+	dfs = func(node *TreeNode) int {
+		// 边界条件
+		if node == nil {
+			return 0
+		}
+		left := dfs(root.Left)
+		right := dfs(root.Right)
+		leftLen, rightLen := 0, 0
+		// 这里不能直接返回left和right，会造成递归循环
+		if node.Left != nil && node.Left.Val == node.Val {
+			leftLen = left + 1
+		}
+		if node.Right != nil && node.Right.Val != node.Val {
+			rightLen = right + 1
+		}
+		// 更新全局
+		ans = max(ans, leftLen+rightLen)
+		return max(leftLen, rightLen)
+	}
+	ans = dfs(root)
+	return ans
+}
