@@ -1,9 +1,6 @@
 package main
 
-import (
-	"fmt"
-	"runtime"
-)
+import "interview/code/producer.go"
 
 func main() {
 	// 数组线性遍历
@@ -196,6 +193,8 @@ func main() {
 	// fmt.Println("res: ", res)
 
 	// PrintAB()
-	fmt.Printf("main 协程数量：%d\n", runtime.NumGoroutine())
-	PrintLetter()
+	// fmt.Printf("main 协程数量：%d\n", runtime.NumGoroutine())
+	// PrintLetter()
+
+	producer.ProducerAndConsumer()
 }
