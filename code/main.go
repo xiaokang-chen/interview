@@ -1,6 +1,9 @@
 package main
 
-import "interview/code/producer.go"
+import (
+	"fmt"
+	"interview/code/array"
+)
 
 func main() {
 	// 数组线性遍历
@@ -196,5 +199,11 @@ func main() {
 	// fmt.Printf("main 协程数量：%d\n", runtime.NumGoroutine())
 	// PrintLetter()
 
-	producer.ProducerAndConsumer()
+	// producer.ProducerAndConsumer()
+	// s := "abcabcbb"
+	// res := strings.LengthOfLongestSubstring(s)
+
+	arr := []int{7, 1, 5, 3, 6, 4}
+	res := array.MaxProfit2(arr)
+	fmt.Println("res: ", res)
 }

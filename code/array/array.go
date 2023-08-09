@@ -1,6 +1,9 @@
 package array
 
-import "interview/code/list"
+import (
+	"interview/code/list"
+	"math"
+)
 
 // RemoveDuplicates 26.删除有序数组中的重复项
 // 时刻保证[0,slow]
@@ -152,4 +155,36 @@ func getLongestPalindrome(s string, l int, r int) string {
 	}
 	// 边界条件问题：因为最后一次相同后，l和r又更新了，此时[l+1, r-1]是目标回文
 	return s[l+1 : r]
+}
+
+// MaxProfit 121.买卖股票的最佳时机（仅能买卖一次）
+func MaxProfit(prices []int) int {
+	n := len(prices)
+	dp0, dp1 := 0, math.MinInt
+	for i := 0; i < n; i++ {
+		// 今天卖了股票：昨天买的股票，获取收益
+		dp0 = max(dp0, dp1+prices[i])
+		// 今天买了股票：因为只能买一次，之前肯定没买过，所以利润肯定是-今天价格
+		dp1 = max(dp1, -prices[i])
+	}
+	return dp0
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+// MaxProfit2 122.买卖股票的最佳时机II（可以多次买卖）
+func MaxProfit2(prices []int) int {
+	n := len(prices)
+	dp0, dp1 := 0, math.MinInt32
+	for i := 0; i < n; i++ {
+		temp := dp0
+		dp0 = max(dp0, dp1+prices[i])
+		dp1 = max(dp1, temp-prices[i])
+	}
+	return dp0
 }
