@@ -59,6 +59,34 @@ func traverse(root *TreeNode) {
 	depth--
 }
 
+// MinDepth 二叉树的最小深度
+func MinDepth(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	// 初始化一个队列
+	q := []*TreeNode{root}
+	depth := 1
+	for len(q) > 0 {
+		for i := 0; i < len(q); i++ {
+			cur := q[0]
+			q = q[1:]
+			// 判断是否到达终点
+			if cur.Left == nil && cur.Right == nil {
+				return depth
+			}
+			if cur.Left != nil {
+				q = append(q, cur.Left)
+			}
+			if cur.Right != nil {
+				q = append(q, cur.Right)
+			}
+		}
+		depth++
+	}
+	return depth
+}
+
 // Traverse1 打印树的每一个节点所在层数
 // 前序遍历
 func Traverse1(root *TreeNode, level int) {

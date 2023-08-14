@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"interview/code/array"
 )
 
 func main() {
@@ -203,7 +202,8 @@ func main() {
 	// s := "abcabcbb"
 	// res := strings.LengthOfLongestSubstring(s)
 
-	arr := []int{7, 1, 5, 3, 6, 4}
-	res := array.MaxProfit2(arr)
+	// arr := []int{7, 1, 5, 3, 6, 4}
+	// res := array.MaxProfit2(arr)
+	res := Match("log.fp.ishumei.com")
 	fmt.Println("res: ", res)
 }

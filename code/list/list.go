@@ -154,6 +154,21 @@ func MergeKLists(lists []*ListNode) *ListNode {
 	return resNode.Next
 }
 
+// MergeKLists2 利用分治合并k个链表
+// 类似归并排序思想
+func MergeKLists2(lists []*ListNode) *ListNode {
+	m := len(lists)
+	if m == 0 {
+		return nil
+	}
+	if m == 1 {
+		return lists[0]
+	}
+	left := MergeKLists2(lists[:m/2])  // 合并左半部分
+	right := MergeKLists2(lists[m/2:]) // 合并右半部分
+	return MergeTwoLists(left, right)
+}
+
 // FindFromEnd 单链表倒数第k个节点
 // 技巧：双指针-快慢指针
 // 倒数第k个节点就是正数第n-k+1个节点，从头节点往后走n-k即可到达
