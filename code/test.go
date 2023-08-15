@@ -3,7 +3,12 @@ package main
 import (
 	"fmt"
 	"interview/code/list"
+<<<<<<< Updated upstream
 	"runtime"
+=======
+	"sort"
+	"strconv"
+>>>>>>> Stashed changes
 	"sync"
 )
 
@@ -100,4 +105,71 @@ func IsCircle(node *list.ListNode) bool {
 		}
 	}
 	return false
+}
+
+// 三数之和
+// 假设：不存在不相同的
+// 定1找2
+func ThreeSum(nums []int) [][]int {
+	// cap, len
+	sort.Ints(nums)
+	ans := make([][]int, 0)
+	for i := 0; i < len(nums)-2; i++ {
+		k := len(nums) - 1
+		target := -1 * nums[i]
+		for j := i + 1; j < len(nums)-1; j++ {
+			// 向左移动k（减小nums[k]的大小）
+			for j < k && nums[j]+nums[k] > target {
+				k--
+			}
+			// 指针重合，退出循环。代表没有在i固定情况下，满足条件的j
+			if j == k {
+				break
+			}
+			if nums[j]+nums[k] == target {
+				ans = append(ans, []int{nums[i], nums[j], nums[k]})
+			}
+		}
+	}
+	return ans
+}
+
+// CountAndSay 38.外观数
+func CountAndSay(n int) string {
+	if n < 0 {
+		return ""
+	}
+	if n == 1 {
+		return "1"
+	}
+	str := CountAndSay(n - 1)
+	byteArr := []byte(str)
+	ans := ""
+	t := 0
+	for i := 0; i < len(str); i++ {
+		item := str[i]   // 49 = 0x31
+		ru := rune(item) // 49
+		i32 := int(item) // 49
+		s := fmt.Sprintf("%c", item)
+		char := strconv.Itoa(int(item))
+		_ = item
+		_ = ru
+		_ = i32
+		_ = s
+		_ = char
+	}
+	for i := 0; i < len(byteArr); i += t {
+		item := byteArr[i]
+		t = 0
+		for j := i; j < len(byteArr); j++ {
+			if item == byteArr[j] {
+				t++
+			} else {
+				break
+			}
+		}
+		s := fmt.Sprintf("%d%c", t, item)
+		ans += s
+	}
+	return ans
 }

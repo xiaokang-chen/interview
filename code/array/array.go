@@ -7,9 +7,9 @@ import (
 
 // RemoveDuplicates 26.删除有序数组中的重复项
 // 时刻保证[0,slow]
-func RemoveDuplicates(nums []int) int {
+func RemoveDuplicates(nums []int) []int {
 	if len(nums) == 0 {
-		return 0
+		return []int{}
 	}
 	slow, fast := 0, 0
 	for fast < len(nums) {
@@ -21,7 +21,7 @@ func RemoveDuplicates(nums []int) int {
 		fast++
 	}
 	// 数组长度为索引+1
-	return slow + 1
+	return nums[:slow+1]
 }
 
 // 83.删除排序链表中的重复元素
