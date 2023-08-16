@@ -400,9 +400,11 @@ unlock tables
 
     ```SQL
     -- 表级别的读锁（共享锁）
+    -- 事务A加共享锁后，其他事务可以读该数据，不可以写该数据
     lock tables t_table read;
 
     -- 表级别的写锁（排它锁）
+    -- 事务A加排它锁后，只允许失误A对数据进行读写操作，其他事务不可对该数据进行读写操作
     lock tables t_table write;
 
     -- 释放锁

@@ -51,7 +51,21 @@ type LinkedListNode struct {
 
 // }
 
-var domainList = []string{"baidu.com", "ishumei.com", "fp.ishumei.com"}
+var domainList = []string{"kaggle.net", "baidu.com", "ishumei.com", "fp.ishumei.com"}
+
+// 1. 建立hashmap
+// 2. 一次性找到最长匹配
+// {
+// 	"net": {
+// 		"kaggle"
+// 	}
+// 	"com": {
+// 		"baidu": {}
+// 		"ishumei": {
+// 			"fp"
+// 		}
+// 	}
+// }
 
 // match
 // www.ishumei.com => ishumei.com
@@ -74,4 +88,31 @@ func Match(s string) map[string]int {
 	}
 	// 查出map中最长的
 	return matchMap
+}
+
+// MatchSubstr 子串匹配
+// ababaca
+// aca
+func MatchSubstr(str, substr string) int {
+	k := 0
+	// 遍历主串
+	for k < len(str) {
+		i, j := k, 0
+		for i < len(str) && j < len(substr) {
+			// 如果相同则一起向后移
+			// 如果不同则回溯
+			if str[i] == substr[j] {
+				i++
+				j++
+			} else {
+				break
+			}
+		}
+		// 如果j走到最后
+		if j == len(substr) {
+			return k
+		}
+		k++
+	}
+	return -1
 }
