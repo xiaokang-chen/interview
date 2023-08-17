@@ -288,3 +288,57 @@ func GetIntersectionNode(headA, headB *ListNode) *ListNode {
 	}
 	return p1
 }
+
+// SortList 148.排序链表
+func SortList(head *ListNode) *ListNode {
+	// 归并排序
+	var merge func(head1, head2 *ListNode) *ListNode
+	var sort func(head *ListNode) *ListNode
+
+	merge = func(head1, head2 *ListNode) *ListNode {
+		// 虚拟头节点
+		dummy := &ListNode{-1, nil}
+		p, q := head1, head2
+		cur := dummy
+		for p != nil && q != nil {
+			if p.Val < q.Val {
+				cur.Next = p
+				p = p.Next
+			} else {
+				cur.Next = q
+				q = q.Next
+			}
+			cur = cur.Next
+		}
+		// 后续处理
+		if p != nil {
+			cur.Next = p
+		}
+		if q != nil {
+			cur.Next = q
+		}
+
+		return dummy.Next
+	}
+
+	sort = func(head *ListNode) *ListNode {
+		// 1. 边界处理
+		if head == nil || head.Next == nil {
+			return head
+		}
+		// 2. 快慢指针，先定位到mid
+		slow, fast := head, head.Next
+		for fast != nil && fast.Next != nil {
+			slow = slow.Next
+			fast = fast.Next.Next
+		}
+
+		mid := slow
+		next := mid.Next
+		// 中间断链
+		mid.Next = nil
+		return merge(sort(head), sort(next))
+	}
+
+	return sort(head)
+}

@@ -1,14 +1,6 @@
 package main
 
-import (
-<<<<<<< Updated upstream
-	"fmt"
-=======
-	"errors"
-	"fmt"
-	"interview/code/array"
->>>>>>> Stashed changes
-)
+// "interview/code/strings"
 
 func main() {
 	// arr := []int{0, -6, -3, 3, 5, 9, -9}
@@ -39,40 +31,37 @@ func main() {
 	// e := foo()
 	// fmt.Println(e)
 
-	var arr = []int{1, 3, 3, 3, 6, 7, 8}
-	res := array.RemoveDuplicates(arr)
-	fmt.Println("res: ", res)
-}
+	// var arr = []int{1, 3, 3, 3, 6, 7, 8}
+	// res := array.RemoveDuplicates(arr)
+	// fmt.Println("res: ", res)
 
-func Append(s []int) {
+	// s := " a good   example "
+	// res := strings.ReverseWords(s)
 
-}
+	// matrix := [][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}
+	// array.Rotate(matrix)
+	// fmt.Println("arr", matrix)
 
-<<<<<<< Updated upstream
-	// PrintAB()
-	// fmt.Printf("main 协程数量：%d\n", runtime.NumGoroutine())
-	// PrintLetter()
+	// list := &Node{
+	// 	Val: 2,
+	// 	Next: &Node{
+	// 		Val: 3,
+	// 		Next: &Node{
+	// 			Val: 1,
+	// 			Next: &Node{
+	// 				Val: 4,
+	// 				Next: &Node{
+	// 					Val: 5,
+	// 				},
+	// 			},
+	// 		},
+	// 	},
+	// }
+	// res := SortList(list)
+	// fmt.Println("arr", res)
 
-	// producer.ProducerAndConsumer()
-	// s := "abcabcbb"
-	// res := strings.LengthOfLongestSubstring(s)
-
-	// arr := []int{7, 1, 5, 3, 6, 4}
-	// res := array.MaxProfit2(arr)
-	res := Match("log.fp.ishumei.com")
-	fmt.Println("res: ", res)
-=======
-func foo() (err error) {
-	defer func() {
-		fmt.Println(err)
-		err = errors.New("a")
-	}()
-	defer func(e error) {
-		fmt.Println(err)
-		err = errors.New("b")
-	}(err)
-	return errors.New("c")
->>>>>>> Stashed changes
+	Print4()
+	// CloseChan()
 }
 
 // 数组线性遍历

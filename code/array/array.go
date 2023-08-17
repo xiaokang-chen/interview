@@ -188,3 +188,14 @@ func MaxProfit2(prices []int) int {
 	}
 	return dp0
 }
+
+// Rotate 旋转图像
+func Rotate(matrix [][]int) {
+	n := len(matrix)
+	// 先沿对角线镜像对称二维矩阵
+	for i := 0; i < n; i++ {
+		for j := i; j < n; j++ {
+			matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+		}
+	}
+}

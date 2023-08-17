@@ -3,12 +3,9 @@ package main
 import (
 	"fmt"
 	"interview/code/list"
-<<<<<<< Updated upstream
 	"runtime"
-=======
 	"sort"
 	"strconv"
->>>>>>> Stashed changes
 	"sync"
 )
 

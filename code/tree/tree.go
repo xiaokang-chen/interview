@@ -310,7 +310,6 @@ func DFSWithRecursion(node *TreeNode) []int {
 	return res
 }
 
-<<<<<<< Updated upstream
 // LongestUnivaluePath 687.最长同值路径
 func LongestUnivaluePath(root *TreeNode) int {
 	var ans int
@@ -338,7 +337,6 @@ func LongestUnivaluePath(root *TreeNode) int {
 	ans = dfs(root)
 	return ans
 }
-=======
+
 // 二叉树最长同值路径
 // 思路：
->>>>>>> Stashed changes
