@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"interview/code/array"
+)
+
 // "interview/code/strings"
 
 func main() {
@@ -38,9 +43,9 @@ func main() {
 	// s := " a good   example "
 	// res := strings.ReverseWords(s)
 
-	// matrix := [][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}
-	// array.Rotate(matrix)
-	// fmt.Println("arr", matrix)
+	matrix := [][]int{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}}
+	res := array.SpiralOrder(matrix)
+	fmt.Println("arr", res)
 
 	// list := &Node{
 	// 	Val: 2,
@@ -60,7 +65,7 @@ func main() {
 	// res := SortList(list)
 	// fmt.Println("arr", res)
 
-	Print4()
+	// Print4()
 	// CloseChan()
 }
 

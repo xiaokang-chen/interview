@@ -105,6 +105,19 @@ GC触发机制：
 
 ## 七、golang 中的GMP
 
+- G：goroutine，用户态线程-协程；
+- M：thread，内核态线程；
+- P：processor，协程调度器；
+
+![Go_GMP](./pic/Go_GMP.png)
+
+Go指令调度流程：
+
+1. 执行`go func()`，先创建一个G，优先放入P的本地队列（最多256个），如果满了，放入全局队列 ；
+2. M获取G，优先从M的本地队列P中获取G，如果为空，则依次去`全局队列`、`其他M的本地队列`去偷取G；
+3. M调用并执行G，会执行G中的func()函数（每个G的运行时间不超过10ms-时间片）；
+4. go的协程调度器数量默认为cpu核心数量，可以通过`runtime.GOMAXPROCS(n)`去设置；
+
 ## 八、golang interface 实现原理
 
 interface数据结构：

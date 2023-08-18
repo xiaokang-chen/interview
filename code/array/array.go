@@ -189,13 +189,83 @@ func MaxProfit2(prices []int) int {
 	return dp0
 }
 
-// Rotate 旋转图像
+// Rotate 48.旋转图像
 func Rotate(matrix [][]int) {
 	n := len(matrix)
-	// 先沿对角线镜像对称二维矩阵
+	// 先对矩阵每一行进行反转，只需要反转一半数量
+	for i := 0; i < n/2; i++ {
+		matrix[i], matrix[n-1-i] = matrix[n-1-i], matrix[i]
+	}
+	// 再沿对角线镜像对称二维矩阵
 	for i := 0; i < n; i++ {
 		for j := i; j < n; j++ {
 			matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
 		}
 	}
+}
+
+// Rotate2 旋转图像
+func Rotate2(matrix [][]int) {
+	n := len(matrix)
+	// 先沿对角线反转元素
+	for i := 0; i < n; i++ {
+		for j := i; j < n; j++ {
+			matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+		}
+	}
+	// 再反转每一行
+	for _, row := range matrix {
+		m := len(row)
+		for i := 0; i < m/2; i++ {
+			row[i], row[m-1-i] = row[m-1-i], row[i]
+		}
+	}
+}
+
+// SpiralOrder 螺旋矩阵
+func SpiralOrder(matrix [][]int) []int {
+	// m行n列
+	m, n := len(matrix), len(matrix[0])
+	top, bottom := 0, m-1
+	left, right := 0, n-1
+	res := make([]int, 0, m*n)
+	for len(res) < m*n {
+		// 1. 在上侧：从左向右
+		// 确保上下空间
+		if top <= right {
+			for i := left; i <= right; i++ {
+				res = append(res, matrix[top][i])
+			}
+			// 上边界下移
+			top++
+		}
+		// 2. 在右侧：从上向下
+		// 确保左右空间
+		if left <= right {
+			for i := top; i <= bottom; i++ {
+				res = append(res, matrix[i][right])
+			}
+			// 右边界左移
+			right--
+		}
+		// 3. 在下侧：从右向左
+		// 确保上下空间
+		if top <= right {
+			for i := right; i >= left; i-- {
+				res = append(res, matrix[bottom][i])
+			}
+			// 下边界上移
+			bottom--
+		}
+		// 4. 在左侧：从下向上
+		// 确保左右空间
+		if left <= right {
+			for i := bottom; i >= top; i-- {
+				res = append(res, matrix[i][left])
+			}
+			// 左边界右移
+			left++
+		}
+	}
+	return res
 }
