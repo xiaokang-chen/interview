@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"interview/code/array"
 )
 
 // "interview/code/strings"
@@ -43,9 +42,9 @@ func main() {
 	// s := " a good   example "
 	// res := strings.ReverseWords(s)
 
-	matrix := [][]int{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}}
-	res := array.SpiralOrder(matrix)
-	fmt.Println("arr", res)
+	// matrix := [][]int{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}}
+	// res := array.SpiralOrder(matrix)
+	// fmt.Println("arr", res)
 
 	// list := &Node{
 	// 	Val: 2,
@@ -67,6 +66,12 @@ func main() {
 
 	// Print4()
 	// CloseChan()
+	// arr := []int{-8, -5, -3, -1, 0, 2, 5}
+	// res := GetMinAbsolute(arr)
+	res1 := Climb1(10)
+	// res2 := Climb2(10)
+
+	fmt.Println(res1)
 }
 
 // 数组线性遍历

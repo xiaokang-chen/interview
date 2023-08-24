@@ -137,4 +137,63 @@ type eface struct {
 ```
 
 `_type 是go里面所有类型的一个抽象`，里面包含GC，反射，大小等需要的细节，它也决定了data如何解释和操作。
-里面包含了非常多信息 类型的大小、哈希、对齐以及种类等自动。
+里面包含了非常多信息类型的大小、哈希、对齐以及种类等自动。
+
+## 九、golang channel 实现原理
+
+channel的实现在src/runtime/chan.go中，内部是一个循环链表。包含buf, sendx, recvx, lock ,recvq, sendq几个部分；
+
+- buf，存储缓冲数据；
+- sendx、recvx记录循环链表中收和发的index；
+- lock是个互斥锁，确保线程安全；
+- recvq、sendq分别是接收（<-channel）或者发送（channel<-x）的goroutine抽象出来的结构体，是个双向链表；
+
+## 十、golang 内存逃逸
+
+- 栈内存：由编译器进行管理，自动申请、分配、释放。大小一般固定；
+- 堆内存：人为手动进行管理，手动申请、分配、释放，硬件内存多大堆内存就有多大，分配速度慢，且会形成内存碎片；
+
+在golang中，内存优先栈分配。逃逸分析用于在堆和栈分配进行选择，通过在编译时期做gc，编译器追踪变量在代码块的作用域，判断变量的引用关系，来决定在栈还是在堆进行分配。`如果作用域外部没有引用，则放到栈中，否则放到堆中`。
+
+**逃逸场景：**
+
+```go
+// 1. 指针逃逸
+func sum(a, b int) *int {
+  res := a + b
+  // 局部变量res逃逸到堆上
+  return &res
+}
+
+// 2. 栈空间不足
+// 1W的切片会逃逸
+func Slice() {
+  s := make([]int, 10000, 10000)
+  
+  for index, _ := range s {
+    s[index] = index
+  }
+}
+
+// 3. 动态类型逃逸
+// fmt.Println(a ...interface{})，编译阶段无法确定其类型
+func main() {
+  s := "Escape"
+  fmt.Println(s)
+}
+
+// 4. 闭包引用对象逃逸
+// 返回一个匿名函数被称为”闭包“
+func Fibonacci() func() int {
+  a, b := 0, 1
+  return func() int {
+    a, b = b, a+b
+    return a
+  }
+}
+```
+
+**如何避免内存逃逸：**
+
+1. 尽量减少外部指针引用，必要时使用值传递；
+2. 尽量不写闭包函数，可读性差且发生逃逸；
