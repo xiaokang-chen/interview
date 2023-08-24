@@ -238,7 +238,7 @@ select * from t_user where name like 'j%' and age = 22
 
 MySQL 5.6 引入的索引下推优化（index condition pushdown)， 可以在联合索引遍历过程中，对联合索引中包含的字段先做判断，直接过滤掉不满足条件的记录，减少回表次数。
 当你的查询语句的执行计划里，出现了 Extra 为 Using index condition，那么说明使用了索引下推的优化。
-比如对于`select * from table where a > 1 and b = 2`，会先对b=2进行判断，过滤掉不满足条件的记录。
+比如对于`select * from table where a > 1 and b = 2`，会在联合索引树(a, b)中先对b=2进行判断，过滤掉不满足条件的记录。
 
 #### 2.2.3 索引区分度
 
@@ -688,3 +688,38 @@ insert into T(c) values(1)
 
 1. 性能：自增主键插入数据的模式是每次会ID最大值+1，这样的顺序插入，每次都是追加操作，不涉及挪动其他记录，不会触发B+树叶子节点的分裂。
 2. 存储空间：用整型做主键，只需要4字节，如果长整型，只需要8字节。而比如用业务主键做主键，比如字符串的身份证号（18位），占用的字节数就会比较高。
+
+### 7.13 最左前缀原则仅是针对联合索引么？
+
+不只是索引的全部定义，只要满足最左前缀，就可以利用索引来加速检索。这个最左前缀可以是联合索引的最左 N 个字段，也可以是字符串索引的最左 M 个字符。后者比如：**要查看第一个字是“张”的人**：
+
+```sql
+select * from t where name like '张%';
+```
+
+### 7.14 二级索引是否会联合主键索引
+
+```sql
+CREATE TABLE `geek` (
+  `a` int(11) NOT NULL,
+  `b` int(11) NOT NULL,
+  `c` int(11) NOT NULL,
+  `d` int(11) NOT NULL,
+  PRIMARY KEY (`a`,`b`),
+  KEY `c` (`c`),
+  KEY `ca` (`c`,`a`),
+  KEY `cb` (`c`,`b`)
+) ENGINE=InnoDB;
+```
+
+针对下面两个语句：
+
+```sql
+-- 需要(c, a)
+select * from geek where c=N order by a limit 1;
+-- 需要(c, b)
+select * from geek where c=N order by b limit 1;
+```
+
+单独建立索引c,会包含主键索引(a,b),实际上就是(c,a,b)，也就是构建索引树的时候，a在相同时，b有序；
+所以和(c,a)这个联合索引完全重复，故上面ca索引可以删除；
