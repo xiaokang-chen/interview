@@ -338,5 +338,22 @@ func LongestUnivaluePath(root *TreeNode) int {
 	return ans
 }
 
-// 二叉树最长同值路径
-// 思路：
+// LowestCommonAncestor 二叉搜索树的最近公共祖先
+func LowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+	// 1. 临界条件：节点为空或者节点本身为p或q
+	// 深度遍历先遍历到的p或q，则先遍历到的节点一定是另一个节点最近祖先
+	if root == nil || root.Val == p.Val || root.Val == q.Val {
+		return root
+	}
+	// 2. 分别在左右子树中寻找，如果左边没有“祖先”，则返回右边，反之亦然
+	// 如果两边都不为空，则代表两边都找到p和q，则当前节点为最近祖先
+	left := LowestCommonAncestor(root.Left, p, q)
+	right := LowestCommonAncestor(root.Right, p, q)
+	if left == nil {
+		return right
+	}
+	if right == nil {
+		return left
+	}
+	return root
+}

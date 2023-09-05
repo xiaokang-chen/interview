@@ -134,6 +134,26 @@ func ReverseList(head *ListNode) *ListNode {
 	return pre
 }
 
+// ReverseListII 链表反转II
+// 给定两个整数left和right，反转位置left到right的链表节点
+func ReverseListII(head *ListNode, left, right int) *ListNode {
+	dummy := &ListNode{-1, head}
+	pre := dummy
+	// 先将pre安置到left-1
+	for i := 0; i < left-1; i++ {
+		pre = pre.Next
+	}
+	cur := pre.Next
+	// right-left+1个元素反转
+	for i := 0; i < right-left; i++ {
+		next := cur.Next
+		cur.Next = next.Next
+		next.Next = pre.Next
+		pre.Next = next
+	}
+	return dummy.Next
+}
+
 // ReverseList2 用递归方式实现反转链表
 func ReverseList2(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {

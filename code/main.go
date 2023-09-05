@@ -2,76 +2,77 @@ package main
 
 import (
 	"fmt"
+	"interview/code/tree"
 )
 
 // "interview/code/strings"
 
 func main() {
-	// arr := []int{0, -6, -3, 3, 5, 9, -9}
-	// res := ThreeSum(arr)
-	// fmt.Println("res: ", res)
-
-	// res := CountAndSay(3)
-
-	// arr := []int{1, 4, 2, 3}
-	// res := MaxProfit(arr)
-	// fmt.Println("res: ", res)
-
-	// arr1 := []int{4, 5, 1, 2, 3}
-	// res1 := CycleMoveNum(arr1)
-	// fmt.Println("res: ", res1)
-
-	// type T interface{}
-	// var (
-	// 	t  T
-	// 	p  *T
-	// 	i1 interface{} = t
-	// 	i2 interface{} = p
-	// )
-	// // true true
-	// fmt.Println(i1 == t, i1 == nil)
-	// // true false
-	// fmt.Println(i2 == p, i2 == nil)
-	// e := foo()
-	// fmt.Println(e)
-
-	// var arr = []int{1, 3, 3, 3, 6, 7, 8}
-	// res := array.RemoveDuplicates(arr)
-	// fmt.Println("res: ", res)
-
-	// s := " a good   example "
-	// res := strings.ReverseWords(s)
-
-	// matrix := [][]int{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}}
-	// res := array.SpiralOrder(matrix)
-	// fmt.Println("arr", res)
-
-	// list := &Node{
-	// 	Val: 2,
-	// 	Next: &Node{
-	// 		Val: 3,
-	// 		Next: &Node{
-	// 			Val: 1,
-	// 			Next: &Node{
-	// 				Val: 4,
-	// 				Next: &Node{
-	// 					Val: 5,
-	// 				},
+	// printRank()
+	// root := &node{
+	// 	data: 0,
+	// 	left: &node{
+	// 		data: 0,
+	// 		left: &node{
+	// 			data: 0,
+	// 		},
+	// 		right: &node{
+	// 			data: 0,
+	// 		},
+	// 	},
+	// 	right: &node{
+	// 		data: 0,
+	// 		left: &node{
+	// 			data: 1,
+	// 		},
+	// 		right: &node{
+	// 			data: 0,
+	// 			left: &node{
+	// 				data: 0,
+	// 			},
+	// 			right: &node{
+	// 				data: 1,
 	// 			},
 	// 		},
 	// 	},
 	// }
-	// res := SortList(list)
-	// fmt.Println("arr", res)
+	// res := getBlackLen(root)
 
-	// Print4()
-	// CloseChan()
-	// arr := []int{-8, -5, -3, -1, 0, 2, 5}
-	// res := GetMinAbsolute(arr)
-	res1 := Climb1(10)
-	// res2 := Climb2(10)
-
-	fmt.Println(res1)
+	root := &tree.TreeNode{
+		Val: 6,
+		Left: &tree.TreeNode{
+			Val: 2,
+			Left: &tree.TreeNode{
+				Val: 0,
+			},
+			Right: &tree.TreeNode{
+				Val: 4,
+				Left: &tree.TreeNode{
+					Val: 3,
+				},
+				Right: &tree.TreeNode{
+					Val: 5,
+				},
+			},
+		},
+		Right: &tree.TreeNode{
+			Val: 8,
+			Left: &tree.TreeNode{
+				Val: 7,
+			},
+			Right: &tree.TreeNode{
+				Val: 9,
+			},
+		},
+	}
+	p := &tree.TreeNode{
+		Val: 2,
+	}
+	q := &tree.TreeNode{
+		Val: 7,
+	}
+	res := tree.LowestCommonAncestor(root, p, q)
+	fmt.Println("res", res)
 }
 
 // 数组线性遍历
