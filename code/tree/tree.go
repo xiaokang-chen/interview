@@ -338,7 +338,7 @@ func LongestUnivaluePath(root *TreeNode) int {
 	return ans
 }
 
-// LowestCommonAncestor 二叉搜索树的最近公共祖先
+// LowestCommonAncestor 236.二叉搜索树的最近公共祖先
 func LowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 	// 1. 临界条件：节点为空或者节点本身为p或q
 	// 深度遍历先遍历到的p或q，则先遍历到的节点一定是另一个节点最近祖先
