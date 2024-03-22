@@ -2,266 +2,119 @@ package main
 
 import (
 	"fmt"
-	"interview/code/tree"
+	"sync"
+	"time"
 )
 
-// "interview/code/strings"
-
 func main() {
-	// printRank()
-	// root := &node{
-	// 	data: 0,
-	// 	left: &node{
-	// 		data: 0,
-	// 		left: &node{
-	// 			data: 0,
-	// 		},
-	// 		right: &node{
-	// 			data: 0,
-	// 		},
-	// 	},
-	// 	right: &node{
-	// 		data: 0,
-	// 		left: &node{
-	// 			data: 1,
-	// 		},
-	// 		right: &node{
-	// 			data: 0,
-	// 			left: &node{
-	// 				data: 0,
-	// 			},
-	// 			right: &node{
-	// 				data: 1,
-	// 			},
-	// 		},
-	// 	},
-	// }
-	// res := getBlackLen(root)
+	// recoverExample()
+	// fmt.Println(unsafe.Sizeof(demo1{})) // 8
+	// fmt.Println(unsafe.Sizeof(demo2{})) // 12
 
-	root := &tree.TreeNode{
-		Val: 6,
-		Left: &tree.TreeNode{
-			Val: 2,
-			Left: &tree.TreeNode{
-				Val: 0,
-			},
-			Right: &tree.TreeNode{
-				Val: 4,
-				Left: &tree.TreeNode{
-					Val: 3,
-				},
-				Right: &tree.TreeNode{
-					Val: 5,
-				},
-			},
-		},
-		Right: &tree.TreeNode{
-			Val: 8,
-			Left: &tree.TreeNode{
-				Val: 7,
-			},
-			Right: &tree.TreeNode{
-				Val: 9,
-			},
-		},
-	}
-	p := &tree.TreeNode{
-		Val: 2,
-	}
-	q := &tree.TreeNode{
-		Val: 7,
-	}
-	res := tree.LowestCommonAncestor(root, p, q)
-	fmt.Println("res", res)
+	// u := []User{
+	// 	{"A", 12},
+	// 	{"B", 15},
+	// 	{"C", 8},
+	// }
+	// s1 := make([]*User, 0, len(u))
+	// for _, v := range u {
+	// 	s1 = append(s1, &v)
+	// }
+	// for _, item := range s1 {
+	// 	fmt.Println(item)
+	// }
+	// arr := [][]int{{1, 0}, {2, 0}, {3, 1}, {3, 2}}
+	// res := getAns(arr)
+	// fmt.Println(res)
+	// m["c"] = 3
+	// smp := sync.Map{}
+	// smp.Store("a", 1)
+	// smp.Store("b", 2)
+	// smp = m
+	// fmt.Println(smp.Load("a"))
+	// arr := []int{1, 2, 3, 4}
+	// list := New(arr)
+	// list.Pop()
+	// list.Push(5)
+	// list.Push(6)
+	// len := list.Len()
+	// fmt.Println("len: ", len)
+
+	go doprint(1)
+	go doprint(2)
+	time.Sleep(2 * time.Second)
 }
 
-// 数组线性遍历
-// var arr = []int{1, 2, 3, 4}
-// traverse(arr)
+var a string
+var done bool
+var once sync.Once = sync.Once{}
 
-// 二叉树非线性遍历
-// root1 := &TreeNode1{
-// 	val: 1,
-// 	left: &TreeNode1{
-// 		val: 2,
-// 	},
-// 	right: &TreeNode1{
-// 		val: 3,
-// 	},
-// }
-// traverse1(root1)
+func setup() {
+	a = "hello, world"
+	done = true
+}
 
-// // N叉树非线性遍历
-// root2 := &TreeNode2{
-// 	val: 1,
-// 	children: []*TreeNode2{
-// 		&TreeNode2{
-// 			val: 2,
-// 		},
-// 		&TreeNode2{
-// 			val: 3,
-// 		},
-// 		&TreeNode2{
-// 			val: 4,
-// 		},
-// 	},
-// }
-// traverse2(root2)
+func doprint(hao int) {
+	if !done {
+		once.Do(setup)
+	}
+	print("a", a, hao)
+}
 
-// list1 := &list.ListNode{
-// 	Val: 1,
-// 	Next: &list.ListNode{
-// 		Val: 2,
-// 		Next: &list.ListNode{
-// 			Val: 4,
-// 		},
-// 	},
-// }
-// list2 := &list.ListNode{
-// 	Val: 1,
-// 	Next: &list.ListNode{
-// 		Val: 3,
-// 		Next: &list.ListNode{
-// 			Val: 4,
-// 		},
-// 	},
-// }
-// node := list.MergeTwoLists(list1, list2)
-// fmt.Println(node)
+type NestedIterator struct {
+	vals []int
+}
 
-// head := &list.ListNode{
-// 	Val: 1,
-// 	Next: &list.ListNode{
-// 		Val: 4,
-// 		Next: &list.ListNode{
-// 			Val: 3,
-// 			Next: &list.ListNode{
-// 				Val: 2,
-// 				Next: &list.ListNode{
-// 					Val: 5,
-// 					Next: &list.ListNode{
-// 						Val: 2,
-// 					},
-// 				},
-// 			},
-// 		},
-// 	},
-// }
-// // resHead := list.Partition(head, 3)
-// resHead := list.ReverseList(head)
-// fmt.Println("res: ", resHead)
+type User struct {
+	Name string
+	age  int
+}
 
-// // 排序
-// arr := []int{8, 4, 5, 7, 1, 3, 6, 2}
+// 内存对齐
+type demo1 struct {
+	a int8
+	b int16
+	c int32
+}
+type demo2 struct {
+	a int8
+	b int32
+	c int16
+}
 
-// res := algorithm.QuickSort(arr, 0, len(arr)-1)
-// fmt.Println("res: ", res)
+// recover()用于捕获panic并处理
+func doSomething() {
+	defer func() {
+		if r := recover(); r != nil {
+			// 处理panic
+			fmt.Println("Recovered:", r)
+		}
+	}()
+	panic("发生了panic！")
+}
 
-// // 查找
-// res1 := algorithm.BinarySearch(arr, 38)
-// fmt.Println("res1: ", res1)
+func recoverFromPanic() {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Recovered from panic:", r)
+			fmt.Println(456)
+		}
+	}()
 
-// p1 := &list.ListNode{
-// 	Val: 1,
-// 	Next: &list.ListNode{
-// 		Val: 4,
-// 		Next: &list.ListNode{
-// 			Val: 5,
-// 		},
-// 	},
-// }
-// p2 := &list.ListNode{
-// 	Val: 1,
-// 	Next: &list.ListNode{
-// 		Val: 3,
-// 		Next: &list.ListNode{
-// 			Val: 4,
-// 		},
-// 	},
-// }
-// p3 := &list.ListNode{
-// 	Val: 2,
-// 	Next: &list.ListNode{
-// 		Val: 6,
-// 	},
-// }
-// lists := []*list.ListNode{
-// 	p1, p2, p3,
-// }
-// // res := list.MergeKLists(lists)
-// res := heap.MergeKLists(lists)
-// fmt.Println("res1: ", res)
+	fmt.Println(123)
+	panic("Something went wrong!")
+}
 
-// node := &list.ListNode{1, nil}
-// res := list.RemoveNthFromEnd(node, 1)
-// fmt.Println("res: ", res)
+func recoverExample() {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Recovered from panic:", r)
+		}
+	}()
 
-// head := &list.ListNode{
-// 	Val: 1,
-// }
-// node1 := &list.ListNode{
-// 	Val: 2,
-// }
-// node2 := &list.ListNode{
-// 	Val: 3,
-// }
-// node3 := &list.ListNode{
-// 	Val: 3,
-// }
-// node4 := &list.ListNode{
-// 	Val: 5,
-// }
-// head.Next = node1
-// node1.Next = node2
-// node2.Next = node3
-// node3.Next = node4
-// node4.Next = nil
+	fmt.Println("Before panic")
 
-// res := list.HasCycle(head)
-// fmt.Println("res: ", res)
+	panic("Something went wrong!")
 
-// var arr = []int{8, 4, 5, 7, 1, 3, 6, 2}
-// res := array.RemoveDuplicates(arr)
-// fmt.Println("res: ", res, arr)
-
-// array.MoveZeroes2(arr)
-// res := array.TwoSum(arr, 9)
-// s := "babad"
-// res := array.LongestPalindrome(s)
-
-// res := algorithm.MergeSort(arr)
-
-// root := &tree.TreeNode{
-// 	Val: 1,
-// 	Left: &tree.TreeNode{
-// 		Val: 2,
-// 		Left: &tree.TreeNode{
-// 			Val: 3,
-// 		},
-// 		Right: &tree.TreeNode{
-// 			Val: 4,
-// 		},
-// 	},
-// 	Right: &tree.TreeNode{
-// 		Val: 5,
-// 		Left: &tree.TreeNode{
-// 			Val: 6,
-// 			Left: &tree.TreeNode{
-// 				Val: 7,
-// 			},
-// 		},
-// 	},
-// }
-// tree.Traverse1(root, 1)
-// res := tree.DiameterOfBinaryTree(root)
-
-// res := algorithm.HeapSort(arr)
-// fmt.Println("res: ", res)
-
-// 设置并行G数量
-// runtime.GOMAXPROCS(2)
-
-// res := tree.BFSWithRecursion(root)
-// fmt.Println("res: ", res)
-
-// PrintAB()
+	fmt.Println("After panic") // 这行代码不会被执行
+}
