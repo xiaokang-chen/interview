@@ -4,12 +4,12 @@
 
 ## 一、golang 中 make 和 new 的区别
 
-1）作用变量类型不同，new给string,int和数组分配内存，make给切片，map，channel分配内存；
+1）作用变量类型不同，new给string,int和数组（基本类型）分配内存，make给切片，map，channel（引用类型）分配内存；
 2）返回类型不一样，new返回指向变量的指针，make返回变量本身；
 3）new 分配的空间被清零。make 分配空间后，会进行初始化；
 
 1. 初始化的区别
-make和new都是golang用来分配内存的内建函数，且都在堆上分配内存。不同的是，new分配空间后，将内存清零，并不会出初始化内存，而make分配空间后，会初始化内存，而不是清零；
+make和new都是golang用来分配内存的内建函数，且都在堆上分配内存。不同的是，new分配空间后，将内存清零，并不会进行初始化内存。而make分配空间后，会初始化内存，而不是清零；
 2. 分配对象的区别
 new(T)为每个类型（包括int、string这种基本类型）分配内存，而make专门为`slice`、`map`、`chan`三种类型分配内存；
 3. 返回类型的区别
@@ -100,8 +100,13 @@ GC触发机制：
 
 ## 六、golang 中的内存管理
 
-栈内存：「栈内存」是计算机对`连续内存`（虚拟内存）采取的「线性分配」管理方式，便于高效存储指令运行过程中的临时变量。
-堆内存：
+栈内存：在Go语言中，栈的内存是由编译器自动进行分配和释放的，栈区往往存储着函数参数、局部变量和调用函数帧，它们随着函数的创建而分配，随着函数的退出而销毁
+堆内存：与栈不同的是，堆区的内存一般由编译器和工程师自己共同进行管理分配，交给 Runtime GC 来释放。在堆上分配时，必须找到一块足够大的内存来存放新的变量数据。后续释放时，垃圾回收器扫描堆空间寻找不再被使用的对象
+我们可以简单理解为：**我们用GO语言开发过程中，要考虑的内存管理只是针对堆内存而言的**
+
+- 如果变量在函数外部存在引用，则必定放在堆中；
+- 如果变量占用内存较大时，则优先放到堆中；
+- 如果变量在函数外部没有引用，则优先放到栈中；
 
 ## 七、golang 中的GMP
 
@@ -155,6 +160,11 @@ channel的实现在src/runtime/chan.go中，内部是一个循环链表。包含
 
 在golang中，内存优先栈分配。逃逸分析用于在堆和栈分配进行选择，通过在编译时期做gc，编译器追踪变量在代码块的作用域，判断变量的引用关系，来决定在栈还是在堆进行分配。`如果作用域外部没有引用，则放到栈中，否则放到堆中`。
 
+```go
+// 查看逃逸分析结果
+go build -gcflags '-m -m -l'
+```
+
 **逃逸场景：**
 
 ```go
@@ -197,3 +207,158 @@ func Fibonacci() func() int {
 
 1. 尽量减少外部指针引用，必要时使用值传递；
 2. 尽量不写闭包函数，可读性差且发生逃逸；
+
+**思考：**
+函数传结构体变量时，应该传值还是指针？（传指针后，变量会内存逃逸并被分配到堆上）
+<font color='red'>
+1.如果结构体较大，传递结构体指针更合适，因为指针类型相比值类型能节省大量的内存空间；
+2.如果结构体较小，传递结构体更合适，因为在栈上分配内存，可以有效减少GC压力</font>
+
+## 十一、golang 并发安全性
+
+多个goroutine对共享资源访问时会造成不确定结果，所以为了确保并发安全性，可以采取以下措施：
+
+1. 使用互斥锁
+2. 使用原子操作
+
+    ```go
+    func main() {
+      var count int32
+      var wg sync.waitGroup
+
+      wg.Add(10)
+      for i := 0; i < 10; i++ {
+        defer wg.Done()
+        go func() {
+          for j := 0; j < 100; j ++ {
+            // count++ // 答案在到达1000之前就因并发操作直接返回，所以最后会<1000
+            atomic.AddInt32(&count, 1) // 原子操作会在内存层面上控制，最后=1000
+          }
+        }
+      }
+      wg.Wait()
+    }
+    ```
+
+3. 使用channel
+4. 使用同步机制（waitgroup）
+
+**死锁场景**：
+
+1. 在goroutine内部对同一个channel同时进行读写
+
+    ```go
+    ch := make(chan bool)
+    ch <- true
+    <-ch
+    close(ch)
+    ```
+
+2. waitgroup的使用错误（wg.Done()在不同的协程中使用）
+
+    ```go
+    var mutex sync.RWMutex
+    var wg sync.WaitGroup
+    func work() {
+      defer wg.Done()
+      mutex.Lock()
+      // 临界区等待造成死锁
+      wg.Wait()
+      mutex.UnLock()
+    }
+    func main() {
+      for i := 0; i < 10; i++ {
+        wg.Add(1)
+        go func() {
+          work()
+        }
+      }
+      wg.Wait()
+    }
+    ```
+
+3. 读写锁重入（读读不会死锁）
+
+    ```go
+    var mutex sync.RWMutex
+    func main() {
+      mutex.RLock()
+      mutex.Lock()
+      mutex.RUnlock()
+      mutex.Unlock()
+    }
+    ```
+
+## 十二、channel的使用
+
+### 12.1 关闭channel
+
+根据 sender 和 receiver 的个数，分下面几种情况：
+(1) 一个 sender，一个 receiver
+(2) 一个 sender， M 个 receiver
+(3) N 个 sender，一个 reciver
+(4) N 个 sender， M 个 receiver
+
+对于（1）和（2），只有一个sender，可以直接在sender端关闭
+
+```go
+func main() {
+  ch := make(chan int, 100)
+
+  // sender
+  go func() {
+    for i := 0; i < 1000; i++ {
+      ch <- i + 1
+    }
+    fmt.Println("sender end")
+    close(ch)
+  }()
+
+  // reviver
+  for i := 0; i < 5; i++ {
+    go func() {
+      for {
+        data, ok := <-ch
+        if !ok {
+          return
+        }
+        fmt.Println("data", data)
+      }
+    }()
+  }
+}
+```
+
+对于（3）
+
+```go
+func main() {
+  maxNum := 1000
+  ch := make(chan int, 100)
+  stopCh := make(chan struct{})
+  // sender
+  for i := 0; i < 1000; i++ {
+    go func() {
+      for {
+        select {
+        case <-stopCh:
+          return
+        case ch <- rand.Intn(maxNum):
+        }
+      }
+    }()
+  }
+
+  // receiver
+  go func() {
+    for value := range ch {
+      if value > maxNum-100 {
+        fmt.Println("send stop signal to senders.")
+        close(stopCh)
+        return
+      }
+      fmt.Println("value：", value)
+    }
+  }()
+}
+```
