@@ -157,17 +157,27 @@ func getLongestPalindrome(s string, l int, r int) string {
 	return s[l+1 : r]
 }
 
+// // MaxProfit 121.买卖股票的最佳时机（仅能买卖一次）
+// func MaxProfit(prices []int) int {
+// 	n := len(prices)
+// 	dp0, dp1 := 0, math.MinInt
+// 	for i := 0; i < n; i++ {
+// 		// 今天卖了股票：昨天买的股票，获取收益
+// 		dp0 = max(dp0, dp1+prices[i])
+// 		// 今天买了股票：因为只能买一次，之前肯定没买过，所以利润肯定是-今天价格
+// 		dp1 = max(dp1, -prices[i])
+// 	}
+// 	return dp0
+// }
+
 // MaxProfit 121.买卖股票的最佳时机（仅能买卖一次）
 func MaxProfit(prices []int) int {
-	n := len(prices)
-	dp0, dp1 := 0, math.MinInt
-	for i := 0; i < n; i++ {
-		// 今天卖了股票：昨天买的股票，获取收益
-		dp0 = max(dp0, dp1+prices[i])
-		// 今天买了股票：因为只能买一次，之前肯定没买过，所以利润肯定是-今天价格
-		dp1 = max(dp1, -prices[i])
+	buy, profit := math.MaxInt32, 0
+	for _, item := range prices {
+		buy = min(buy, item)
+		profit = max(profit, item-buy)
 	}
-	return dp0
+	return profit
 }
 
 func max(a, b int) int {
@@ -177,16 +187,39 @@ func max(a, b int) int {
 	return b
 }
 
-// MaxProfit2 122.买卖股票的最佳时机II（可以多次买卖）
-func MaxProfit2(prices []int) int {
-	n := len(prices)
-	dp0, dp1 := 0, math.MinInt32
-	for i := 0; i < n; i++ {
-		temp := dp0
-		dp0 = max(dp0, dp1+prices[i])
-		dp1 = max(dp1, temp-prices[i])
+func min(a, b int) int {
+	if a < b {
+		return a
 	}
-	return dp0
+	return b
+}
+
+// // MaxProfit2 122.买卖股票的最佳时机II（可以多次买卖）
+// func MaxProfit2(prices []int) int {
+// 	n := len(prices)
+// 	dp0, dp1 := 0, math.MinInt32
+// 	for i := 0; i < n; i++ {
+// 		temp := dp0
+// 		dp0 = max(dp0, dp1+prices[i])
+// 		dp1 = max(dp1, temp-prices[i])
+// 	}
+// 	return dp0
+// }
+
+// MaxProfit2 122.买卖股票的最佳时机II（可以多次买卖）
+// 7,1,5,3,6,4
+func MaxProfit2(prices []int) int {
+	buy, profit := prices[0], 0
+	for i := 1; i < len(prices); i++ {
+		if prices[i] < prices[i-1] {
+			profit += prices[i-1] - buy
+			buy = prices[i]
+		}
+	}
+	if prices[len(prices)-1] > buy {
+		profit += prices[len(prices)-1] - buy
+	}
+	return profit
 }
 
 // Rotate 48.旋转图像

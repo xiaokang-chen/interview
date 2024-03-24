@@ -238,6 +238,7 @@ func MiddleNode(head *ListNode) *ListNode {
 // HasCycle 141.判断链表成环
 func HasCycle(head *ListNode) bool {
 	slow, fast := head, head
+	// fast一定在前面，只需要判断fast的边界
 	for fast != nil && fast.Next != nil {
 		slow = slow.Next
 		fast = fast.Next.Next
@@ -361,4 +362,56 @@ func SortList(head *ListNode) *ListNode {
 	}
 
 	return sort(head)
+}
+
+func ArrToList(arr []int) *ListNode {
+	dummy := &ListNode{Val: -1}
+	p := dummy
+	for _, v := range arr {
+		p.Next = &ListNode{
+			Val: v,
+		}
+		p = p.Next
+	}
+	return dummy.Next
+}
+
+func ListToArr(node *ListNode) []int {
+	arr := []int{}
+	for node != nil {
+		arr = append(arr, node.Val)
+		node = node.Next
+	}
+	return arr
+}
+
+// AddTwoNumbers 两数之和
+func AddTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
+	dummy := &ListNode{Val: -1}
+	p := dummy
+	carry, sum := 0, 0
+	v1, v2 := 0, 0
+	for l1 != nil || l2 != nil {
+		if l1 != nil {
+			v1 = l1.Val
+			l1 = l1.Next
+		}
+		if l2 != nil {
+			v2 = l2.Val
+			l2 = l2.Next
+		}
+		amount := v1 + v2 + carry
+		carry = amount / 10
+		sum = amount % 10
+		p.Next = &ListNode{Val: sum}
+		// 向后移动
+		p = p.Next
+		v1 = 0
+		v2 = 0
+	}
+	//  边界
+	if carry > 0 {
+		p.Next = &ListNode{Val: carry}
+	}
+	return dummy.Next
 }
