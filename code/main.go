@@ -1,17 +1,13 @@
 package main
 
 import (
-	"fmt"
-	"interview/code/list"
+	"interview/code/producer.go"
 )
 
 func main() {
-	nums1 := []int{2, 4, 3}
-	nums2 := []int{5, 6, 4}
-	list1 := list.ArrToList(nums1)
-	list2 := list.ArrToList(nums2)
-
-	resNode := list.AddTwoNumbers(list1, list2)
-	res := list.ListToArr(resNode)
-	fmt.Println("res", res)
+	// s1 := "acaabcabcababa"
+	// s2 := "abcaba"
+	// res := KmpSearch(s1, s2)
+	// fmt.Println("res：", res)
+	producer.ProducerAndConsumer()
 }

@@ -58,7 +58,7 @@ encoding+data的总长度；
 
 <font color='red'>相比于ziplist，listpack不再记录前一个加点长度字段，只记录当前节点长度。当我们向 listpack 加入一个新元素的时候，不会影响其他节点的长度字段的变化，从而避免了压缩列表的连锁更新问题。</font>
 
-### 1.4 zskiplist
+### 1.4 quicklist
 
 **quicklist（跳表）数据结构如下**：
 ![zskiplist跳表](/pic/zskiplist.jpg)
@@ -88,7 +88,7 @@ encoding+data的总长度；
 每执行一条`写操作`命令，就把该命令以追加的方式写入到一个文件里。重启 Redis 的时候，先去读取这个文件里的命令，并且执行它，就会恢复缓存数据。
 `AOF日志是在主线程中执行的`
 
-AOF写回策略如下：
+AOF写回策略（rewrite）如下：
 ![AOF写回策略](/pic/AOF写回策略.jpg)
 
 AOF日志过大会触发`AOF重写机制`，通过重写机制，删除被覆盖的旧命令，如：

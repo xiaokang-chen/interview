@@ -40,3 +40,66 @@ func ReverseWords(s string) string {
 	}
 	return strings.Join(t, " ")
 }
+
+// 验证回文串
+func ValidPalindrome(s string) bool {
+	i, j := 0, len(s)-1
+	for i < j {
+		if !isalnums(s[i]) {
+			i++
+			continue
+		}
+		if !isalnums(s[j]) {
+			j--
+			continue
+		}
+		if s[i] != s[j] {
+			return false
+		}
+		i++
+		j--
+	}
+	return true
+}
+
+func isalnums(char byte) bool {
+	return (char >= 'A' && char <= 'Z') ||
+		(char >= 'a' && char <= 'z') ||
+		(char >= '0' && char <= '9')
+}
+
+// IsSubsequence 判断子序列
+// 判断s是否为t的子序列
+func IsSubsequence(s string, t string) bool {
+	i, j := 0, 0
+	for i < len(s) && j < len(t) {
+		if s[i] == t[j] {
+			i++
+		}
+		j++
+	}
+	return i == len(s)
+}
+
+// // IsSubsequence2 进阶判断子序列
+// // 有大量的s
+// func IsSubsequence2(s string, t string) bool {
+// 	n, m := len(s), len(t)
+// 	f := make([][26]int, m)
+// 	for i := 0; i < 26; i++ {
+// 		f[m][i] = m
+// 	}
+// 	for i := m - 1; i >= 0; i-- {
+// 		for j := 0; j < 26; j++ {
+// 			if t[i] == byte(j+'a') {
+// 				f[i][j] = i
+// 			} else {
+// 				f[i][j] = f[i+1][j]
+// 			}
+// 		}
+// 	}
+// 	add := 0
+// 	for i:= 0; i < n; i++ {
+
+// 	}
+// }

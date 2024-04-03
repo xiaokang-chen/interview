@@ -20,9 +20,9 @@ MySQL 存储的行为是由存储引擎实现的，默认是InnoDB。
 
 1. db.opt
 2. frm表结构文件
-3. ibd表数据文件
+3. idb表数据文件
 
-如果要是开启表分区，那么一个表分区就会对应一个ibd文件。
+如果要是开启表分区，那么一个表分区就会对应一个idb文件。
 
 ### 1.3 InnoDB逻辑存储结构
 
@@ -781,3 +781,16 @@ select * from geek where c=N order by b limit 1;
 3. 行锁：
 行锁是在引擎层实现的，并不是所有引擎都支持行锁，MyISAM就不支持行锁，对于这样引擎的表，同一张表上某一时刻只能有一个更新在执行，这就会影响业务的并发度。
 行锁很好理解：比如事务A更新了一行，而事务B也要更新同一行，则必须等待事务A的操作完成后才能更新。
+
+### 7.16 mysql定义用户变量
+
+@是用户变量，@@是系统变量
+
+```sql
+select version into @old_version from products where id = 123; -- 1
+select @old_version; -- 1
+```
+
+### 7.17 分布式数据库自增ID方案
+
+UUID或者雪花ID
