@@ -123,6 +123,9 @@ Go指令调度流程：
 3. M调用并执行G，会执行G中的func()函数（每个G的运行时间不超过10ms-时间片）；
 4. go的协程调度器数量默认为cpu核心数量，可以通过`runtime.GOMAXPROCS(n)`去设置；
 
+协程和线程之间的关系是m:n
+![alt text](image.png)
+
 ## 八、golang interface 实现原理
 
 interface数据结构：
@@ -291,7 +294,93 @@ func Fibonacci() func() int {
 
 ## 十二、channel的使用
 
-### 12.1 关闭channel
+### 12.1 channel的实现
+
+### 12.2 channel的死锁场景
+
+1. Go同一个协程中，对无缓冲channel同时发送和接收数据
+无缓冲channel在发送和接收数据的时候都会阻塞，所以一个协程同时对无缓冲channel发送和接收，就会出现死锁状态
+
+    ```go
+    func main() {
+      q := make(chan int)
+      q <- 1
+      <-q
+    }
+    // 解决方案：放到两个协程中
+    func main() {
+      q := make(chan int)
+      go func() {
+        q <-1
+      }()
+      <-q
+    }
+    ```
+
+    <font color='red'>补充：对带缓冲的channel进行读写不会造成死锁，除非空读和满写</font>
+
+2. 空读
+
+    ```go
+    func main() {
+      q := make(chan int, 2)
+      <-q
+    }
+    // 解决方案：引入select的default默认处理方式
+    func main() {
+      select {
+      case val := <-q:
+        fmt.Println(val)
+      default:
+      }
+    }
+    ```
+
+3. 满写
+
+    ```go
+    q := make(chan int, 2)
+    q <- 1
+    q <- 2
+    q <- 3
+    // 解决方案：采用select的default
+    select {
+    case q <- 3:
+      fmt.Println("ok")
+    default:
+      fmt.Println("wrong")
+    }
+
+    // 注意：对于无缓冲的channel，满写是不会造成deadlock的
+    q := make(chan int)
+    q <- 1
+    q <- 2
+    q <- 3
+    ```
+
+### 12.3 channel panic场景
+
+1. 关闭已经关闭的channel
+
+    ```go
+    func main() {
+      q := make(chan int, 2)
+      close(q)
+      close(q)
+    }
+    ```
+
+2. 向关闭的channel中写数据
+
+    ```go
+    func main() {
+      q := make(chan int, 2)
+      close(q)
+      q <- 1
+    }
+    ```
+
+### 12.4 关闭channel
 
 根据 sender 和 receiver 的个数，分下面几种情况：
 (1) 一个 sender，一个 receiver
@@ -362,3 +451,36 @@ func main() {
   }()
 }
 ```
+
+### 12.5 channel控制goroutine顺序性
+
+```go
+var wg sync.WaitGroup
+
+func main() {
+  ch1 := make(chan struct{}, 1)
+  ch2 := make(chan struct{}, 1)
+  ch3 := make(chan struct{}, 1)
+  ch1 <- struct{}{}
+  wg.Add(3)
+  start := time.Now().Unix()
+  go printNum("goroutine1", ch1, ch2)
+  go printNum("goroutine2", ch2, ch3)
+  go printNum("goroutine3", ch3, ch1)
+  wg.Wait()
+  end := time.Now().Unix()
+  fmt.Printf("duration：%d", end-start)
+}
+
+func printNum(name string, inCh, outCh chan struct{}) {
+  time.Sleep(1 * time.Second)
+  select {
+  case <-inCh:
+    fmt.Printf("%s\n", name)
+    outCh <- struct{}{}
+  }
+  wg.Done()
+}
+```
+
+## 十三、编程输出题
